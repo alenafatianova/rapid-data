@@ -1,0 +1,12 @@
+.bounding-box_wrapper {
+    display: flex;
+    position: relative;
+}
+
+.box_image {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    background-color: #b6bbd0a8;
+}

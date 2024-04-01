@@ -1,0 +1,15 @@
+.app_wrapper {
+  height: 100%;
+  padding: 15px;
+}
+
+@media screen and (max-width: 768px) {
+  
+  .app_wrapper {
+    padding: 10px;
+  }
+}
+
+
+
+
