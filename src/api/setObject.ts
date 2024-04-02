@@ -8,6 +8,4 @@ export const postObject = async (responseObj: BodyRequestType): Promise<void> =>
   setTimeout(() => {
     return requestOptions;
   }, 300);
-
-  console.log("The guess is submitted!");
 };

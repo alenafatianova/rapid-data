@@ -5,10 +5,12 @@ import { Button } from "../Button/Button";
 import { CarsType, Coordinate } from "../types/types";
 import vid_4_600 from '../../assets/data/vid_4_600.jpg'
 import { postObject } from "../../api/setObject";
+import { useNavigate } from "react-router";
 
 export const SolvingPage = () => {
 
   const [isBounded, setIsBounded] = useState(false)
+  const navigate = useNavigate();
 
   const [currentImage, setCurrentImage] = useState<CarsType>({ id: '1',
   path: vid_4_600,
@@ -30,8 +32,9 @@ export const SolvingPage = () => {
     setTimeout(async () => {
       await postObject(responseObj)
       console.log('Guess was submitted!', responseObj)
-    }, 200)
-    // redirect on thank you page
+      navigate("/thankyou");
+    }, 3000)
+    
   }
 
   const cancelHandler = () => {
@@ -44,6 +47,7 @@ export const SolvingPage = () => {
   const noCarHandler = () => {
     console.log('There is no car on the image!')
   }
+  
   return (
     <div className="solving-page_wrapper">
       <div className="solving-page_banner">

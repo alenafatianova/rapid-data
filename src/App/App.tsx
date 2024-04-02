@@ -4,6 +4,7 @@ import { SolvingPage } from "../features/SolvingPage/SolvingPage";
 import { Routes, Route } from "react-router";
 import { Header } from "../Header/Header";
 import { InitialPage } from "../features/InitialPage/InitialPage";
+import { ThankYouPage } from "../features/ThankYouPage/ThankYouPage";
 
 export const App = () => {
   return (
@@ -12,6 +13,7 @@ export const App = () => {
       <Routes>
         <Route path="/" element={<InitialPage />} />
         <Route path="/solve" element={<SolvingPage />} />
+        <Route path='/thankyou' element={<ThankYouPage />} />
       </Routes>
     </div>
   );
