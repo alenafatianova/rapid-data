@@ -25,4 +25,18 @@
     bottom: -5px;
     right: -5px;
     cursor: se-resize;
-  }
+}
+
+@media screen and (max-width: 375px) {
+    .box_image {
+        max-width: 300px;
+    }
+    .box_image img {
+        width: 100%;
+    }
+
+    .bounding-box {
+        width: 70px !important;
+        height: 50px !important;
+    }
+}
