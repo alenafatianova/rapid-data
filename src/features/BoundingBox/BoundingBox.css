@@ -10,17 +10,19 @@
     justify-content: center;
     background-color: #b6bbd0a8;
 }
-.solving-page_buttons {
-    display: grid;
-    grid-template-columns: 115px 115px 115px;
-    grid-gap: 20px;
-    justify-content: center;
-    margin-top: 23px;
+
+.bounding-box {
+    position: absolute;
+    border: 2px solid blue;
+    resize: both;
+    overflow: hidden
 }
 
-
-.submit_button:hover,
-.cancel_button:hover,
-.no-car_button:hover {
-    background-color: #b9d4ff !important;
-}
+.bounding-box:hover {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    bottom: -5px;
+    right: -5px;
+    cursor: se-resize;
+  }
