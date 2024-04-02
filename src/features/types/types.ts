@@ -10,3 +10,22 @@ export interface ButtonType {
   children: string;
   onClick: () => void;
 }
+
+export interface BodyRequestType {
+  id: string,
+	boundingBox: {
+		topLeft: {
+			x: number,
+			y: number,
+		},
+		bottomRight: {
+			x: number
+			y: number
+		}
+	}
+}
+
+export interface Coordinate {
+	x: number,
+	y: number,
+}
