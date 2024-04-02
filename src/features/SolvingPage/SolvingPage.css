@@ -18,3 +18,18 @@
     color: white;
     font-size: 18px;
 }
+
+.solving-page_buttons {
+    display: grid;
+    grid-template-columns: 115px 115px 115px;
+    grid-gap: 20px;
+    justify-content: center;
+    margin-top: 23px;
+}
+
+
+.submit_button:hover,
+.cancel_button:hover,
+.no-car_button:hover {
+    background-color: #b9d4ff !important;
+}
