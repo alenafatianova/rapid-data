@@ -1,0 +1,9 @@
+.text_container {
+    border-radius: 5px;
+    max-width: 800px;
+    margin-top: 150px;
+}
+
+.skip_button:hover {
+    background-color: #b9d4ff !important;
+}
