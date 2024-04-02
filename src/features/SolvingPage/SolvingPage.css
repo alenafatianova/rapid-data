@@ -63,4 +63,41 @@
         min-width: 40px !important;
     }
 
-  }
+}
+
+@media screen and (max-width: 414px) {
+  
+    .solving-page_wrapper {
+        max-width: 400px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .solving-page_banner {
+        height: 40px;
+    }
+
+    .banner_text {
+        font-size: 12px;
+    }
+
+    .solving-page_buttons {
+        display: flex;
+    }
+
+    .submit_button,
+    .cancel_button,
+    .no-car_button {
+        min-width: 40px !important;
+    }
+
+}
+
+@media screen and (max-width: 430px) {
+    .solving-page_banner {
+        height: 40px;
+    }
+}

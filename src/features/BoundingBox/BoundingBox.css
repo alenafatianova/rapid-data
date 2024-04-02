@@ -40,3 +40,25 @@
         height: 50px !important;
     }
 }
+
+@media screen and (max-width: 414px) {
+    .box_image img {
+        width: 100%;
+    }
+
+    .bounding-box {
+        width: 90px !important;
+        height: 70px !important;
+    }
+}
+
+@media screen and (max-width: 430px) {
+    .box_image img {
+        width: 100%;
+    }
+
+    .bounding-box {
+        width: 90px !important;
+        height: 70px !important;
+    }
+}
