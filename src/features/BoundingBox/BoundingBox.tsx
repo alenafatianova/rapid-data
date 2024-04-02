@@ -40,7 +40,13 @@ export const BoundingBox: React.FC<BoundingBoxType> = ({
     setIsDragging(true);
   };
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseMove = (e: {
+    clientX?: any;
+    clientY?: any;
+    touches?: any;
+    movementX?: number;
+    movementY?: number;
+  }) => {
     if (isDragging) {
       setPosition({
         x: e.clientX - dragOffset.x,
@@ -48,7 +54,7 @@ export const BoundingBox: React.FC<BoundingBoxType> = ({
       });
     }
     if (isResizing) {
-      handleResize(e);
+      handleResize(e.touches);
     }
   };
 
@@ -57,29 +63,65 @@ export const BoundingBox: React.FC<BoundingBoxType> = ({
     setIsResizing(false);
   };
 
-  const handleResize = (e: { movementX: number; movementY: number }) => {
+  const handleResize = (e: {
+    touches: any[] | any;
+    movementX: number;
+    movementY: number;
+  }) => {
     const newWidth = size.width + e.movementX;
     const newHeight = size.height + e.movementY;
 
     if (newWidth > 0 && newHeight > 0) {
-      setSize({
-        width: newWidth,
-        height: newHeight,
-      });
+      const touch = e.touches[0];
+      if (touch) {
+        setSize({
+          width: touch.clientX - position.x,
+          height: touch.clientY - position.y,
+        });
+      }
     }
   };
 
-  const handleResizeStart = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleResizeStart = (e: React.TouchEvent<HTMLDivElement>) => {
     e.stopPropagation();
     setIsResizing(true);
   };
 
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+    setIsResizing(false);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (isDragging) {
+      const touch = e.touches[0];
+      if (touch) {
+        setPosition({
+          x: touch.clientX - dragOffset.x,
+          y: touch.clientY - dragOffset.y,
+        });
+      }
+    }
+
+    if (isResizing) {
+      const touch = e.touches[0];
+      if (touch) {
+        handleResize({
+          touches: e.touches,
+          movementX: touch.clientX - dragOffset.x,
+          movementY: touch.clientY - dragOffset.y,
+        });
+      }
+    }
+  };
 
   return (
     <div
       className="bounding-box_wrapper"
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
     >
       <div className="box_image">
         <img src={currentImage?.path} alt="Car" />
@@ -93,10 +135,7 @@ export const BoundingBox: React.FC<BoundingBoxType> = ({
           height: size.height,
         }}
         onMouseDown={handleMouseDown}
-      />
-      <div
-        className="resize-handle"
-        onMouseDown={handleResizeStart}
+        onTouchStart={handleResizeStart}
       />
     </div>
   );
