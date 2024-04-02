@@ -1,10 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./BoundingBox.css";
 import { getObjectAfterDelay } from "../../api/getObject";
 import { CarsType } from "../types/types";
 
-export const BoundingBox = () => {
-  const [currentImage, setCurrentImage] = useState<CarsType>();
+interface BoundingBoxType {
+  currentImage: CarsType, 
+  setCurrentImage: (currentImage: CarsType) => void
+}
+
+export const BoundingBox: React.FC<BoundingBoxType> = ({currentImage, setCurrentImage}) => {
+
 
   useEffect(() => {
     const getImage = async () => {
@@ -19,11 +24,12 @@ export const BoundingBox = () => {
     getImage();
   }, []);
 
+ 
   return (
     <div className="bounding-box_wrapper">
       <div className="box_image">
         <img src={currentImage?.path} alt="Car" />
-      </div>
+      </div> 
     </div>
   );
 };
