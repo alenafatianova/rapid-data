@@ -30,7 +30,8 @@
 
 .submit_button:hover,
 .cancel_button:hover,
-.no-car_button:hover {
+.no-car_button:hover,
+.delete-box:hover {
     background-color: #b9d4ff !important;
 }
 
@@ -59,10 +60,10 @@
 
     .submit_button,
     .cancel_button,
-    .no-car_button {
+    .no-car_button, 
+    .delete-box {
         min-width: 40px !important;
     }
-
 }
 
 @media screen and (max-width: 414px) {
@@ -90,7 +91,8 @@
 
     .submit_button,
     .cancel_button,
-    .no-car_button {
+    .no-car_button,
+    .delete-box {
         min-width: 40px !important;
     }
 
