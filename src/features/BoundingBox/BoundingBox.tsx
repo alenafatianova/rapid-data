@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./BoundingBox.css";
 import { getObjectAfterDelay } from "../../api/getObject";
 import { CarsType } from "../types/types";
@@ -7,9 +7,22 @@ import { Resizable } from "re-resizable";
 interface BoundingBoxType {
   currentImage: CarsType;
   setCurrentImage: (currentImage: CarsType) => void;
-  onChange: (coordinates: { topLeft: { x: number; y: number }; bottomRight: { x: number; y: number }}) => void;
-  resetTransform: boolean
-  setResetTransform?: (resetTransform: boolean) => void
+  onChange: (coordinates: {
+    topLeft: { x: number; y: number };
+    bottomRight: { x: number; y: number };
+  }) => void;
+  resetTransform: boolean;
+  setResetTransform?: (resetTransform: boolean) => void;
+}
+
+interface BoundingBoxStyle {
+  left: number;
+  top: number;
+  width: number;
+  height: number | string;
+  resize?: "both" | "none";
+  overflow?: "auto" | "hidden";
+  position?: "static" | "relative"
 }
 
 export const BoundingBox: React.FC<BoundingBoxType> = ({
@@ -17,12 +30,12 @@ export const BoundingBox: React.FC<BoundingBoxType> = ({
   setCurrentImage,
   onChange,
   resetTransform,
-  setResetTransform
+  setResetTransform,
 }) => {
   const [isDrawing, setIsDrawing] = useState(false);
   const [startPosition, setStartPosition] = useState({ x: 0, y: 0 });
   const [endPosition, setEndPosition] = useState({ x: 0, y: 0 });
-
+  const [isBoxDrawn, setIsBoxDrawn] = useState(false);
 
   useEffect(() => {
     const getImage = async () => {
@@ -37,41 +50,57 @@ export const BoundingBox: React.FC<BoundingBoxType> = ({
     getImage();
   }, []);
 
-  // to be able to draw new rectangle after reseting the previous one 
+  // to be able to draw new rectangle after reseting the previous one
   useEffect(() => {
     if (resetTransform) {
-      setIsDrawing(false); 
+      setIsDrawing(false);
+      setIsBoxDrawn(false);
       setStartPosition({ x: 0, y: 0 });
-      setEndPosition({ x: 0, y: 0 }); 
+      setEndPosition({ x: 0, y: 0 });
       setResetTransform && setResetTransform(false); // if setResetTransform, then reset transform value
     }
   }, [resetTransform, setResetTransform]);
 
-
-
-  const handleStart = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
+  const handleStart = (
+    e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
+  ) => {
     setIsDrawing(true);
     const position = getCursorPosition(e);
     setStartPosition(position);
+    
   };
 
-  const handleMove = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
-    if (!isDrawing) return;
-    const position = getCursorPosition(e);
-    setEndPosition(position);
+  const handleMove = (
+    e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
+  ) => {
+    if (isDrawing) {
+      const position = getCursorPosition(e);
+      setEndPosition(position);
+    }
+    e.preventDefault();
+    setIsBoxDrawn(true);
   };
 
   const handleEnd = () => {
     if (!isDrawing) return;
-    setIsDrawing(false);
     onChange({
-      topLeft: { x: Math.min(startPosition.x, endPosition.x), y: Math.min(startPosition.y, endPosition.y) },
-      bottomRight: { x: Math.max(startPosition.x, endPosition.x), y: Math.max(startPosition.y, endPosition.y) }
+      topLeft: {
+        x: Math.min(startPosition.x, endPosition.x),
+        y: Math.min(startPosition.y, endPosition.y),
+      },
+      bottomRight: {
+        x: Math.max(startPosition.x, endPosition.x),
+        y: Math.max(startPosition.y, endPosition.y),
+      },
     });
+    setIsDrawing(false);
+    setIsBoxDrawn(true);
   };
 
-  const getCursorPosition = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
-    if ('touches' in e) {
+  const getCursorPosition = (
+    e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
+  ) => {
+    if ("touches" in e) {
       const touch = e.touches[0];
       return { x: touch.clientX, y: touch.clientY };
     } else {
@@ -79,26 +108,39 @@ export const BoundingBox: React.FC<BoundingBoxType> = ({
     }
   };
 
-  const boundingBoxStyle = {
-    left: resetTransform ? 0 : Math.min(startPosition.x, endPosition.x),
-    top: resetTransform ? 0 : Math.min(startPosition.y, endPosition.y),
-    width: resetTransform ? 0 : Math.abs(startPosition.x - endPosition.x),
-    height: resetTransform ? 0 : Math.abs(startPosition.y - endPosition.y)
+  const boundingBoxStyle: BoundingBoxStyle = {
+    left: isBoxDrawn ? Math.min(startPosition.x, endPosition.x) : 0,
+    top: isBoxDrawn ? Math.min(startPosition.y, endPosition.y) : 0,
+    width: isBoxDrawn ?  Math.abs(startPosition.x - endPosition.x) : 0,
+    height: isBoxDrawn ? Math.abs(startPosition.y - endPosition.y) : 0,
+    resize: isBoxDrawn ? "both" : "none",
+    overflow: isBoxDrawn ? "auto" : "hidden",
+    
   };
 
- 
+
+
   return (
     <div
       className="bounding-box_wrapper"
       onMouseDown={handleStart}
-      onMouseMove={handleMove}
+      onTouchMove={handleMove} // Only call handleMove when isDrawing is true
       onMouseUp={handleEnd}
       onTouchStart={handleStart}
-      onTouchMove={handleMove}
+      onMouseMove={handleMove} // Only call handleMove when isDrawing is true
       onTouchEnd={handleEnd}
     >
-      
-      <div className="bounding-box" style={boundingBoxStyle} />
+      <div className={"bounding-box"} style={boundingBoxStyle}>
+        <Resizable
+          defaultSize={{
+            width: boundingBoxStyle.width,
+            height: boundingBoxStyle.height,
+          }}
+          // style={{ position: isBoxDrawn ?  "static" : "relative"}}
+        
+        />
+      </div>
+
       <div className="box_image">
         <img src={currentImage?.path} alt="Car" />
       </div>
