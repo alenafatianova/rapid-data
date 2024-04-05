@@ -13,6 +13,8 @@ interface BoundingBoxType {
   }) => void;
   resetTransform: boolean;
   setResetTransform?: (resetTransform: boolean) => void;
+  isBoxDrawn: boolean
+  setIsBoxDrawn: (isBoxDrawn: boolean) => void
 }
 
 interface BoundingBoxStyle {
@@ -26,16 +28,18 @@ interface BoundingBoxStyle {
 }
 
 export const BoundingBox: React.FC<BoundingBoxType> = ({
-  currentImage,
+  currentImage,  
+  isBoxDrawn,
+  resetTransform,
   setCurrentImage,
   onChange,
-  resetTransform,
   setResetTransform,
+  setIsBoxDrawn
 }) => {
   const [isDrawing, setIsDrawing] = useState(false);
   const [startPosition, setStartPosition] = useState({ x: 0, y: 0 });
   const [endPosition, setEndPosition] = useState({ x: 0, y: 0 });
-  const [isBoxDrawn, setIsBoxDrawn] = useState(false);
+  
 
   useEffect(() => {
     const getImage = async () => {
@@ -57,28 +61,28 @@ export const BoundingBox: React.FC<BoundingBoxType> = ({
       setIsBoxDrawn(false);
       setStartPosition({ x: 0, y: 0 });
       setEndPosition({ x: 0, y: 0 });
-      setResetTransform && setResetTransform(false); // if setResetTransform, then reset transform value
+      setResetTransform && setResetTransform(false);
     }
-  }, [resetTransform, setResetTransform]);
+  }, [resetTransform, setResetTransform, setIsBoxDrawn]);
 
-  const handleStart = (
-    e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
-  ) => {
-    setIsDrawing(true);
+console.log('resetTransform:', resetTransform)
+
+  const handleStart = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
     const position = getCursorPosition(e);
-    setStartPosition(position);
     
+    setIsDrawing(true);
+    setStartPosition(position);
   };
 
-  const handleMove = (
-    e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
-  ) => {
+  const handleMove = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
     if (isDrawing) {
       const position = getCursorPosition(e);
       setEndPosition(position);
+      setIsBoxDrawn(true);
     }
     e.preventDefault();
-    setIsBoxDrawn(true);
+   
+    
   };
 
   const handleEnd = () => {
@@ -118,7 +122,7 @@ export const BoundingBox: React.FC<BoundingBoxType> = ({
     
   };
 
-
+console.log('isBoxDrawn:', isBoxDrawn)
 
   return (
     <div

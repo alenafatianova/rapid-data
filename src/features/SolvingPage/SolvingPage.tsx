@@ -17,12 +17,13 @@ export const SolvingPage = () => {
   const [isBounded, setIsBounded] = useState(false);
   const [resetTransform, setResetTransform] = useState(false);
   const [popupOpen, setPopupOpen] = useState(false)
+  const [isBoxDrawn, setIsBoxDrawn] = useState(false);
 
-  const [currentImage, setCurrentImage] = useState<CarsType[]>([
+  const [currentImage, setCurrentImage] = useState<CarsType[]>(([
     { id: "1", path: vid_4_600, fileName: "vid_4_600.jpg", target: "car" },
     { id: "2", path: vid_4_980, fileName: "vid_4_980.jpg", target: "car" },
     { id: "3", path: vid_4_1000, fileName: "vid_4_1000.jpg", target: "car" },
-  ]);
+  ]));
 
   const [imageIndex, setImageIndex] = useState(0)
   
@@ -46,7 +47,9 @@ export const SolvingPage = () => {
             setIsBounded(false)
             // wait 3 seconds and after alows user to draw another box
             setResetTransform(true)
-            setTimeout(() => setResetTransform(false), 3000);
+            setTimeout(() => setResetTransform(false), 1000);
+
+            setIsBoxDrawn(false)
           } else {
             setPopupOpen(true)
           }
@@ -105,6 +108,8 @@ export const SolvingPage = () => {
       <BoundingBox
         resetTransform={resetTransform}
         currentImage={currentImage[imageIndex]}
+        isBoxDrawn={isBoxDrawn}
+        setIsBoxDrawn={setIsBoxDrawn}
         setCurrentImage={() => {}}
         onChange={handleBoundingBoxChange}
       />
