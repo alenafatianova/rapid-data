@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./SolvingPage.css";
 import { BoundingBox } from "../BoundingBox/BoundingBox";
 import { Button } from "../Button/Button";
@@ -9,11 +9,14 @@ import vid_4_1000 from "../../assets/data/vid_4_1000.jpg";
 import { postObject } from "../../api/setObject";
 import { useNavigate } from "react-router";
 import throttle from "lodash/throttle";
+import { PopupForm } from "../Popup/PopupForm";
+
 
 export const SolvingPage = () => {
   const navigate = useNavigate();
   const [isBounded, setIsBounded] = useState(false);
   const [resetTransform, setResetTransform] = useState(false);
+  const [popupOpen, setPopupOpen] = useState(false)
 
   const [currentImage, setCurrentImage] = useState<CarsType[]>([
     { id: "1", path: vid_4_600, fileName: "vid_4_600.jpg", target: "car" },
@@ -22,6 +25,9 @@ export const SolvingPage = () => {
   ]);
 
   const [imageIndex, setImageIndex] = useState(0)
+  
+  // state to track how many images were shown 
+  const [imagesShown, setImagesShown] = useState(0);
 
   const [responseObj, setResponseObj] = useState<ResponseObjType>({
     id: currentImage[imageIndex].id,
@@ -42,10 +48,9 @@ export const SolvingPage = () => {
             setResetTransform(true)
             setTimeout(() => setResetTransform(false), 3000);
           } else {
-            // Make another page with suggestion to continue the tasks or to go back to initial page
-            navigate("/thankyou");
+            setPopupOpen(true)
           }
-         
+         setImagesShown(imagesShown + 1)
         } catch (err) {
           console.log("Error while submiting: ", err);
           throw new Error();
@@ -77,6 +82,19 @@ export const SolvingPage = () => {
     setTimeout(() => setResetTransform(false), 3000);
   };
 
+  const handleContinue = () => {
+    setPopupOpen(false);
+    setImageIndex(0);
+    setImagesShown(0);
+    setResetTransform(true)
+    setIsBounded(false)
+  }
+
+  const handleBackToMainPage = () => {
+    setPopupOpen(false);
+    navigate('/thankyou');
+  };
+
   return (
     <div className="solving-page_wrapper">
       <div className="solving-page_banner">
@@ -105,6 +123,7 @@ export const SolvingPage = () => {
           No car on the image
         </Button>
       </div>
+      <PopupForm  handleContinue={handleContinue} handleBackToMainPage={handleBackToMainPage} open={popupOpen} setOpen={setPopupOpen} />
     </div>
   );
 };

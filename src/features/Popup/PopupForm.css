@@ -1,0 +1,10 @@
+.popup_container {
+    background-color: #ffff;
+    padding: 10px;
+    opacity: 0.9;
+}
+
+.popup_buttons {
+    display: flex;
+    justify-content: space-between;
+}

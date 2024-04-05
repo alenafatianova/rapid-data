@@ -49,6 +49,7 @@
     "lodash": "^4.17.21",
     "re-resizable": "^6.9.11",
     "react-draggable": "^4.4.6",
-    "react-resizable": "^3.0.5"
+    "react-resizable": "^3.0.5",
+    "reactjs-popup": "^2.0.6"
   }
 }
