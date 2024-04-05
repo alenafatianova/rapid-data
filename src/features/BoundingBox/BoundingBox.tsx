@@ -13,8 +13,8 @@ interface BoundingBoxType {
   }) => void;
   resetTransform: boolean;
   setResetTransform?: (resetTransform: boolean) => void;
-  isBoxDrawn: boolean
-  setIsBoxDrawn: (isBoxDrawn: boolean) => void
+  isBoxDrawn: boolean;
+  setIsBoxDrawn: (isBoxDrawn: boolean) => void;
 }
 
 interface BoundingBoxStyle {
@@ -24,17 +24,17 @@ interface BoundingBoxStyle {
   height: number | string;
   resize?: "both" | "none";
   overflow?: "auto" | "hidden";
-  position?: "static" | "relative"
+  position?: "static" | "relative";
 }
 
 export const BoundingBox: React.FC<BoundingBoxType> = ({
-  currentImage,  
+  currentImage,
   isBoxDrawn,
   resetTransform,
   setCurrentImage,
   onChange,
   setResetTransform,
-  setIsBoxDrawn
+  setIsBoxDrawn,
 }) => {
   const [isDrawing, setIsDrawing] = useState(false);
   const [startPosition, setStartPosition] = useState({ x: 0, y: 0 });
@@ -61,31 +61,31 @@ export const BoundingBox: React.FC<BoundingBoxType> = ({
       setIsBoxDrawn(false);
       setStartPosition({ x: 0, y: 0 });
       setEndPosition({ x: 0, y: 0 });
-      setIsResizing(false)
+      setIsResizing(false);
       setResetTransform && setResetTransform(false);
     }
   }, [resetTransform, setResetTransform, setIsBoxDrawn]);
 
-
-
-  const handleStart = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
+  const handleStart = (
+    e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>,
+  ) => {
     if (!isBoxDrawn) {
       const position = getCursorPosition(e);
-    
+
       setIsDrawing(true);
       setStartPosition(position);
     }
   };
 
-  const handleMove = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
+  const handleMove = (
+    e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>,
+  ) => {
     if (isDrawing) {
       const position = getCursorPosition(e);
       setEndPosition(position);
       setIsBoxDrawn(true);
     }
     e.preventDefault();
-   
-    
   };
 
   const handleEnd = () => {
@@ -105,7 +105,7 @@ export const BoundingBox: React.FC<BoundingBoxType> = ({
   };
 
   const getCursorPosition = (
-    e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
+    e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>,
   ) => {
     if ("touches" in e) {
       const touch = e.touches[0];
@@ -118,14 +118,11 @@ export const BoundingBox: React.FC<BoundingBoxType> = ({
   const boundingBoxStyle: BoundingBoxStyle = {
     left: isBoxDrawn ? Math.min(startPosition.x, endPosition.x) : 0,
     top: isBoxDrawn ? Math.min(startPosition.y, endPosition.y) : 0,
-    width: isBoxDrawn ?  Math.abs(startPosition.x - endPosition.x) : 0,
+    width: isBoxDrawn ? Math.abs(startPosition.x - endPosition.x) : 0,
     height: isBoxDrawn ? Math.abs(startPosition.y - endPosition.y) : 0,
     resize: isBoxDrawn ? "both" : "none",
-    overflow: isBoxDrawn ? "auto" : "hidden", 
+    overflow: isBoxDrawn ? "auto" : "hidden",
   };
-
-
-
 
   return (
     <div

@@ -10,7 +10,7 @@ class ErrorBoundary extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      error: true,
+      error: false,
     };
   }
 
@@ -23,7 +23,7 @@ class ErrorBoundary extends React.Component<any, any> {
 }
 
 const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
+  document.getElementById("root") as HTMLElement,
 );
 root.render(
   <React.StrictMode>
@@ -32,7 +32,7 @@ root.render(
         <App />
       </BrowserRouter>
     </ErrorBoundary>
-  </React.StrictMode>
+  </React.StrictMode>,
 );
 
 // If you want to start measuring performance in your app, pass a function

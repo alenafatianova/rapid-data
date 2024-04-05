@@ -14,7 +14,7 @@ export interface ButtonType {
 
 export interface BodyRequestType {
   id: string;
-  boundingBox: BoxParamsType | null
+  boundingBox: BoxParamsType | null;
 }
 
 export interface Coordinate {
@@ -35,7 +35,10 @@ export interface ResponseObjType {
 export interface BoundingBoxType {
   currentImage: CarsType;
   setCurrentImage: (currentImage: CarsType) => void;
-  onChange: (coordinates: { topLeft: { x: number; y: number }; bottomRight: { x: number; y: number }}) => void;
-  className?: string
-  resetTransform: boolean
+  onChange: (coordinates: {
+    topLeft: { x: number; y: number };
+    bottomRight: { x: number; y: number };
+  }) => void;
+  className?: string;
+  resetTransform: boolean;
 }

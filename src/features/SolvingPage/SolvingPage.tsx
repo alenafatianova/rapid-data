@@ -11,23 +11,22 @@ import { useNavigate } from "react-router";
 import throttle from "lodash/throttle";
 import { PopupForm } from "../Popup/PopupForm";
 
-
 export const SolvingPage = () => {
   const navigate = useNavigate();
   const [isBounded, setIsBounded] = useState(false);
   const [resetTransform, setResetTransform] = useState(false);
-  const [popupOpen, setPopupOpen] = useState(false)
+  const [popupOpen, setPopupOpen] = useState(false);
   const [isBoxDrawn, setIsBoxDrawn] = useState(false);
 
-  const [currentImage, setCurrentImage] = useState<CarsType[]>(([
+  const [currentImage, setCurrentImage] = useState<CarsType[]>([
     { id: "1", path: vid_4_600, fileName: "vid_4_600.jpg", target: "car" },
     { id: "2", path: vid_4_980, fileName: "vid_4_980.jpg", target: "car" },
     { id: "3", path: vid_4_1000, fileName: "vid_4_1000.jpg", target: "car" },
-  ]));
+  ]);
 
-  const [imageIndex, setImageIndex] = useState(0)
-  
-  // state to track how many images were shown 
+  const [imageIndex, setImageIndex] = useState(0);
+
+  // state to track how many images were shown
   const [imagesShown, setImagesShown] = useState(0);
 
   const [responseObj, setResponseObj] = useState<ResponseObjType>({
@@ -42,18 +41,18 @@ export const SolvingPage = () => {
           await postObject(responseObj);
           console.log("Guess was submitted!", responseObj);
           if (imageIndex < 2) {
-            setImageIndex(imageIndex + 1)
+            setImageIndex(imageIndex + 1);
             // reset the box
-            setIsBounded(false)
+            setIsBounded(false);
             // wait 3 seconds and after alows user to draw another box
-            setResetTransform(true)
+            setResetTransform(true);
             setTimeout(() => setResetTransform(false), 1000);
 
-            setIsBoxDrawn(false)
+            setIsBoxDrawn(false);
           } else {
-            setPopupOpen(true)
+            setPopupOpen(true);
           }
-         setImagesShown(imagesShown + 1)
+          setImagesShown(imagesShown + 1);
         } catch (err) {
           console.log("Error while submiting: ", err);
           throw new Error();
@@ -89,13 +88,13 @@ export const SolvingPage = () => {
     setPopupOpen(false);
     setImageIndex(0);
     setImagesShown(0);
-    setResetTransform(true)
-    setIsBounded(false)
-  }
+    setResetTransform(true);
+    setIsBounded(false);
+  };
 
   const handleBackToMainPage = () => {
     setPopupOpen(false);
-    navigate('/thankyou');
+    navigate("/thankyou");
   };
 
   return (
@@ -128,7 +127,12 @@ export const SolvingPage = () => {
           No car on the image
         </Button>
       </div>
-      <PopupForm  handleContinue={handleContinue} handleBackToMainPage={handleBackToMainPage} open={popupOpen} setOpen={setPopupOpen} />
+      <PopupForm
+        handleContinue={handleContinue}
+        handleBackToMainPage={handleBackToMainPage}
+        open={popupOpen}
+        setOpen={setPopupOpen}
+      />
     </div>
   );
 };
