@@ -39,7 +39,7 @@ export const BoundingBox: React.FC<BoundingBoxType> = ({
   const [isDrawing, setIsDrawing] = useState(false);
   const [startPosition, setStartPosition] = useState({ x: 0, y: 0 });
   const [endPosition, setEndPosition] = useState({ x: 0, y: 0 });
-  
+  const [isResizing, setIsResizing] = useState(false);
 
   useEffect(() => {
     const getImage = async () => {
@@ -61,17 +61,20 @@ export const BoundingBox: React.FC<BoundingBoxType> = ({
       setIsBoxDrawn(false);
       setStartPosition({ x: 0, y: 0 });
       setEndPosition({ x: 0, y: 0 });
+      setIsResizing(false)
       setResetTransform && setResetTransform(false);
     }
   }, [resetTransform, setResetTransform, setIsBoxDrawn]);
 
-console.log('resetTransform:', resetTransform)
+
 
   const handleStart = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
-    const position = getCursorPosition(e);
+    if (!isBoxDrawn) {
+      const position = getCursorPosition(e);
     
-    setIsDrawing(true);
-    setStartPosition(position);
+      setIsDrawing(true);
+      setStartPosition(position);
+    }
   };
 
   const handleMove = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
@@ -118,11 +121,11 @@ console.log('resetTransform:', resetTransform)
     width: isBoxDrawn ?  Math.abs(startPosition.x - endPosition.x) : 0,
     height: isBoxDrawn ? Math.abs(startPosition.y - endPosition.y) : 0,
     resize: isBoxDrawn ? "both" : "none",
-    overflow: isBoxDrawn ? "auto" : "hidden",
-    
+    overflow: isBoxDrawn ? "auto" : "hidden", 
   };
 
-console.log('isBoxDrawn:', isBoxDrawn)
+
+
 
   return (
     <div
@@ -140,8 +143,6 @@ console.log('isBoxDrawn:', isBoxDrawn)
             width: boundingBoxStyle.width,
             height: boundingBoxStyle.height,
           }}
-          // style={{ position: isBoxDrawn ?  "static" : "relative"}}
-        
         />
       </div>
 

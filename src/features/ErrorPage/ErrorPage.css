@@ -1,0 +1,11 @@
+.error-page_wrapper {
+    margin-top: 150px;
+    font-size: 18px;
+    display: grid;
+    justify-content: center;
+    justify-items: center;
+}
+
+.image_container {
+    margin-top: 50px;
+}
