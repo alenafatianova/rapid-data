@@ -6,6 +6,7 @@ export const Button: React.FC<ButtonType> = ({
   children,
   className,
   onClick,
+  disabled
 }) => {
   return (
     <React.Fragment>
@@ -24,6 +25,7 @@ export const Button: React.FC<ButtonType> = ({
           backgroundColor: "white",
         }}
         onClick={onClick}
+        disabled={disabled}
       >
         {children}
       </button>
