@@ -12,20 +12,20 @@ export interface ButtonType {
 }
 
 export interface BodyRequestType {
-  id: string,
-	boundingBox: {
-		topLeft: {
-			x: number,
-			y: number,
-		},
-		bottomRight: {
-			x: number
-			y: number
-		}
-	}
+  id: string;
+  boundingBox: {
+    topLeft: {
+      x: number;
+      y: number;
+    };
+    bottomRight: {
+      x: number;
+      y: number;
+    };
+  };
 }
 
 export interface Coordinate {
-	x: number,
-	y: number,
+  x: number;
+  y: number;
 }

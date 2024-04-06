@@ -1,6 +1,8 @@
 import { BodyRequestType } from "../features/types/types";
 
-export const postObject = async (responseObj: BodyRequestType): Promise<void> => {
+export const postObject = async (
+  responseObj: BodyRequestType,
+): Promise<void> => {
   const requestOptions = {
     method: "POST",
     body: JSON.stringify(responseObj),
