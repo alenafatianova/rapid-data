@@ -6,7 +6,7 @@ export const Button: React.FC<ButtonType> = ({
   children,
   className,
   onClick,
-  disabled
+  disabled,
 }) => {
   return (
     <React.Fragment>

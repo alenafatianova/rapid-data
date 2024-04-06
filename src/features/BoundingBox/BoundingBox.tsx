@@ -21,7 +21,7 @@ interface BoundingBoxStyle {
   height: number | string;
   resize?: "both" | "none";
   overflow?: "auto" | "hidden";
-  position?: "static" | "relative"
+  position?: "static" | "relative";
 }
 
 export const BoundingBox: React.FC<BoundingBoxType> = ({
@@ -110,7 +110,7 @@ export const BoundingBox: React.FC<BoundingBoxType> = ({
   const boundingBoxStyle: BoundingBoxStyle = {
     left: isBoxDrawn ? Math.min(startPosition.x, endPosition.x) : 0,
     top: isBoxDrawn ? Math.min(startPosition.y, endPosition.y) : 0,
-    width: isBoxDrawn ?  Math.abs(startPosition.x - endPosition.x) : 0,
+    width: isBoxDrawn ? Math.abs(startPosition.x - endPosition.x) : 0,
     height: isBoxDrawn ? Math.abs(startPosition.y - endPosition.y) : 0,
     resize: isBoxDrawn ? "both" : "none",
     overflow: isBoxDrawn ? "auto" : "hidden",
