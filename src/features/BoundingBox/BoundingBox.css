@@ -15,38 +15,21 @@
   border: 2px solid blue;
 }
 
-@media screen and (max-width: 375px) {
-  .box_image {
-    max-width: 300px;
-  }
-  .box_image img {
-    width: 100%;
-  }
-
-  .bounding-box {
-    width: 70px !important;
-    height: 50px !important;
-  }
-}
-
-@media screen and (max-width: 414px) {
-  .box_image img {
-    width: 100%;
-  }
-
-  .bounding-box {
-    width: 90px !important;
-    height: 70px !important;
-  }
-}
-
 @media screen and (max-width: 430px) {
+  .bounding-box_wrapper {
+    display: flex;
+    background-color: #b6bbd0a8;
+    justify-content: center;
+  }
+
+  .box_image {
+    max-width: 350px;
+  }
   .box_image img {
     width: 100%;
   }
 
   .bounding-box {
-    width: 90px !important;
-    height: 70px !important;
+    position: absolute;
   }
 }

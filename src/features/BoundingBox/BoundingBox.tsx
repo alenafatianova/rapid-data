@@ -3,10 +3,11 @@ import "./BoundingBox.css";
 import { getObjectAfterDelay } from "../../api/getObject";
 import { CarsType } from "../types/types";
 import { Resizable } from "re-resizable";
+import { cars } from "../SolvingPage/utils";
 
 interface BoundingBoxType {
-  currentImage: CarsType;
-  setCurrentImage: (currentImage: CarsType) => void;
+  currentImage: CarsType | null;
+  setCurrentImage: (currentImage: CarsType | null) => void;
   onChange: (coordinates: {
     topLeft: { x: number; y: number };
     bottomRight: { x: number; y: number };
@@ -39,7 +40,6 @@ export const BoundingBox: React.FC<BoundingBoxType> = ({
   const [isDrawing, setIsDrawing] = useState(false);
   const [startPosition, setStartPosition] = useState({ x: 0, y: 0 });
   const [endPosition, setEndPosition] = useState({ x: 0, y: 0 });
-  const [isResizing, setIsResizing] = useState(false);
 
   useEffect(() => {
     const getImage = async () => {
@@ -61,7 +61,6 @@ export const BoundingBox: React.FC<BoundingBoxType> = ({
       setIsBoxDrawn(false);
       setStartPosition({ x: 0, y: 0 });
       setEndPosition({ x: 0, y: 0 });
-      setIsResizing(false);
       setResetTransform && setResetTransform(false);
     }
   }, [resetTransform, setResetTransform, setIsBoxDrawn]);
@@ -144,7 +143,7 @@ export const BoundingBox: React.FC<BoundingBoxType> = ({
       </div>
 
       <div className="box_image">
-        <img src={currentImage?.path} alt="Car" />
+        <img src={currentImage!.path} alt="Car" />
       </div>
     </div>
   );

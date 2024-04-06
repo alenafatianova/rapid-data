@@ -1,15 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./SolvingPage.css";
 import { BoundingBox } from "../BoundingBox/BoundingBox";
 import { Button } from "../Button/Button";
 import { CarsType, ResponseObjType } from "../types/types";
-import vid_4_600 from "../../assets/data/vid_4_600.jpg";
-import vid_4_980 from "../../assets/data/vid_4_980.jpg";
-import vid_4_1000 from "../../assets/data/vid_4_1000.jpg";
 import { postObject } from "../../api/setObject";
 import { useNavigate } from "react-router";
 import throttle from "lodash/throttle";
 import { PopupForm } from "../Popup/PopupForm";
+import { cars } from "./utils";
 
 export const SolvingPage = () => {
   const navigate = useNavigate();
@@ -17,12 +15,7 @@ export const SolvingPage = () => {
   const [resetTransform, setResetTransform] = useState(false);
   const [popupOpen, setPopupOpen] = useState(false);
   const [isBoxDrawn, setIsBoxDrawn] = useState(false);
-
-  const [currentImage, setCurrentImage] = useState<CarsType[]>([
-    { id: "1", path: vid_4_600, fileName: "vid_4_600.jpg", target: "car" },
-    { id: "2", path: vid_4_980, fileName: "vid_4_980.jpg", target: "car" },
-    { id: "3", path: vid_4_1000, fileName: "vid_4_1000.jpg", target: "car" },
-  ]);
+  const [currentImage, setCurrentImage] = useState<CarsType | null>(null);
 
   const [imageIndex, setImageIndex] = useState(0);
 
@@ -30,9 +23,14 @@ export const SolvingPage = () => {
   const [imagesShown, setImagesShown] = useState(0);
 
   const [responseObj, setResponseObj] = useState<ResponseObjType>({
-    id: currentImage[imageIndex].id,
+    id: cars[imageIndex].id,
     boundingBox: null,
   });
+
+  useEffect(() => {
+    const randomCar = cars[Math.floor(Math.random() * cars.length)];
+    setCurrentImage(randomCar);
+  }, []);
 
   const submitHandler = () => {
     if (isBounded) {
@@ -42,6 +40,7 @@ export const SolvingPage = () => {
           console.log("Guess was submitted!", responseObj);
           if (imageIndex < 2) {
             setImageIndex(imageIndex + 1);
+            setCurrentImage(cars[imageIndex + 1]);
             // reset the box
             setIsBounded(false);
             // wait 3 seconds and after alows user to draw another box
@@ -73,7 +72,7 @@ export const SolvingPage = () => {
   }) => {
     setIsBounded(true);
     setResponseObj({
-      id: currentImage[imageIndex].id,
+      id: cars[imageIndex].id,
       boundingBox: coordinates,
     });
   };
@@ -90,6 +89,9 @@ export const SolvingPage = () => {
     setImagesShown(0);
     setResetTransform(true);
     setIsBounded(false);
+    // Set a new random image after clicking "Continue"
+    const randomCar = cars[Math.floor(Math.random() * cars.length)];
+    setCurrentImage(randomCar);
   };
 
   const handleBackToMainPage = () => {
@@ -104,14 +106,17 @@ export const SolvingPage = () => {
           Do you see a car? Drag a rectangle over it!
         </p>
       </div>
-      <BoundingBox
-        resetTransform={resetTransform}
-        currentImage={currentImage[imageIndex]}
-        isBoxDrawn={isBoxDrawn}
-        setIsBoxDrawn={setIsBoxDrawn}
-        setCurrentImage={() => {}}
-        onChange={handleBoundingBoxChange}
-      />
+      {currentImage && (
+        <BoundingBox
+          resetTransform={resetTransform}
+          currentImage={currentImage}
+          isBoxDrawn={isBoxDrawn}
+          setIsBoxDrawn={setIsBoxDrawn}
+          setCurrentImage={setCurrentImage}
+          onChange={handleBoundingBoxChange}
+        />
+      )}
+
       <div className="solving-page_buttons">
         <Button
           disabled={!isBounded}

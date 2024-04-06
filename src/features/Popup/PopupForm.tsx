@@ -27,8 +27,12 @@ export const PopupForm: React.FC<PopupType> = ({
         <div className="popup_container">
           <p className="popup_text">Do you want to continue solving task?</p>
           <div className="popup_buttons">
-            <Button onClick={handleContinue}>Continue</Button>
-            <Button onClick={handleBackToMainPage}>To main page</Button>
+            <Button className="button_continue" onClick={handleContinue}>
+              Continue
+            </Button>
+            <Button className="button_back" onClick={handleBackToMainPage}>
+              To main page
+            </Button>
           </div>
         </div>
       </Popup>
