@@ -16,8 +16,8 @@ export const SolvingPage = () => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [isBoxDrawn, setIsBoxDrawn] = useState(false);
   const [currentImage, setCurrentImage] = useState<CarsType | null>(null);
-
   const [imageIndex, setImageIndex] = useState(0);
+  const [noCar, setNoCar] = useState(false)
 
   // state to track how many images were shown
   const [imagesShown, setImagesShown] = useState(0);
@@ -60,10 +60,18 @@ export const SolvingPage = () => {
     }
   };
 
+
   const trottleSubnitHandler = throttle(submitHandler, 2000);
 
+
   const noCarHandler = () => {
-    !isBounded && console.log("There is no car on the image!");
+    setNoCar(true)
+
+    if (noCar) {
+      !isBounded && console.log("There is no car on the image!");
+      const randomCar = cars[Math.floor(Math.random() * cars.length)];
+      setCurrentImage(randomCar)
+    }
   };
 
   const handleBoundingBoxChange = (coordinates: {
