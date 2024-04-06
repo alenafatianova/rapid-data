@@ -8,3 +8,10 @@
   display: flex;
   justify-content: space-between;
 }
+
+@media screen and (max-width: 430px) {
+  .popup_container {
+    position: relative;
+    top: -222px;
+  }
+}
