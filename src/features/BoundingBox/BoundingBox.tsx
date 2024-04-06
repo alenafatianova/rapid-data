@@ -14,6 +14,16 @@ interface BoundingBoxType {
   setResetTransform?: (resetTransform: boolean) => void;
 }
 
+interface BoundingBoxStyle {
+  left: number;
+  top: number;
+  width: number;
+  height: number | string;
+  resize?: "both" | "none";
+  overflow?: "auto" | "hidden";
+  position?: "static" | "relative";
+}
+
 export const BoundingBox: React.FC<BoundingBoxType> = ({
   currentImage,
   setCurrentImage,
@@ -24,6 +34,7 @@ export const BoundingBox: React.FC<BoundingBoxType> = ({
   const [isDrawing, setIsDrawing] = useState(false);
   const [startPosition, setStartPosition] = useState({ x: 0, y: 0 });
   const [endPosition, setEndPosition] = useState({ x: 0, y: 0 });
+  const [isBoxDrawn, setIsBoxDrawn] = useState(false);
 
   useEffect(() => {
     const getImage = async () => {
@@ -42,6 +53,7 @@ export const BoundingBox: React.FC<BoundingBoxType> = ({
   useEffect(() => {
     if (resetTransform) {
       setIsDrawing(false);
+      setIsBoxDrawn(false);
       setStartPosition({ x: 0, y: 0 });
       setEndPosition({ x: 0, y: 0 });
       setResetTransform && setResetTransform(false); // if setResetTransform, then reset transform value
@@ -70,9 +82,12 @@ export const BoundingBox: React.FC<BoundingBoxType> = ({
   const handleMove = (
     e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>,
   ) => {
-    if (!isDrawing) return;
-    const position = getCursorPosition(e);
-    setEndPosition(position);
+    if (isDrawing) {
+      const position = getCursorPosition(e);
+      setEndPosition(position);
+    }
+    e.preventDefault();
+    setIsBoxDrawn(true);
   };
 
   const handleEnd = () => {
@@ -88,23 +103,27 @@ export const BoundingBox: React.FC<BoundingBoxType> = ({
         y: Math.max(startPosition.y, endPosition.y),
       },
     });
+    setIsDrawing(false);
+    setIsBoxDrawn(true);
   };
 
-  const boundingBoxStyle = {
-    left: resetTransform ? 0 : Math.min(startPosition.x, endPosition.x),
-    top: resetTransform ? 0 : Math.min(startPosition.y, endPosition.y),
-    width: resetTransform ? 0 : Math.abs(startPosition.x - endPosition.x),
-    height: resetTransform ? 0 : Math.abs(startPosition.y - endPosition.y),
+  const boundingBoxStyle: BoundingBoxStyle = {
+    left: isBoxDrawn ? Math.min(startPosition.x, endPosition.x) : 0,
+    top: isBoxDrawn ? Math.min(startPosition.y, endPosition.y) : 0,
+    width: isBoxDrawn ? Math.abs(startPosition.x - endPosition.x) : 0,
+    height: isBoxDrawn ? Math.abs(startPosition.y - endPosition.y) : 0,
+    resize: isBoxDrawn ? "both" : "none",
+    overflow: isBoxDrawn ? "auto" : "hidden",
   };
 
   return (
     <div
       className="bounding-box_wrapper"
       onMouseDown={handleStart}
-      onMouseMove={handleMove}
       onMouseUp={handleEnd}
       onTouchStart={handleStart}
-      onTouchMove={handleMove}
+      onMouseMove={handleMove} // Only call handleMove when isDrawing is true
+      onTouchMove={handleMove} // Only call handleMove when isDrawing is true
       onTouchEnd={handleEnd}
     >
       <div className="bounding-box" style={boundingBoxStyle} />
