@@ -1,64 +1,64 @@
 .bounding-box_wrapper {
-    display: flex;
-    position: relative;
+  display: flex;
+  position: relative;
 }
 
 .box_image {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    justify-content: center;
-    background-color: #b6bbd0a8;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  background-color: #b6bbd0a8;
 }
 
 .bounding-box {
-    position: absolute;
-    border: 2px solid blue;
-    resize: both;
-    overflow: hidden
+  position: absolute;
+  border: 2px solid blue;
+  resize: both;
+  overflow: hidden;
 }
 
 .bounding-box:hover {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    bottom: -5px;
-    right: -5px;
-    cursor: se-resize;
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  bottom: -5px;
+  right: -5px;
+  cursor: se-resize;
 }
 
 @media screen and (max-width: 375px) {
-    .box_image {
-        max-width: 300px;
-    }
-    .box_image img {
-        width: 100%;
-    }
+  .box_image {
+    max-width: 300px;
+  }
+  .box_image img {
+    width: 100%;
+  }
 
-    .bounding-box {
-        width: 70px !important;
-        height: 50px !important;
-    }
+  .bounding-box {
+    width: 70px !important;
+    height: 50px !important;
+  }
 }
 
 @media screen and (max-width: 414px) {
-    .box_image img {
-        width: 100%;
-    }
+  .box_image img {
+    width: 100%;
+  }
 
-    .bounding-box {
-        width: 90px !important;
-        height: 70px !important;
-    }
+  .bounding-box {
+    width: 90px !important;
+    height: 70px !important;
+  }
 }
 
 @media screen and (max-width: 430px) {
-    .box_image img {
-        width: 100%;
-    }
+  .box_image img {
+    width: 100%;
+  }
 
-    .bounding-box {
-        width: 90px !important;
-        height: 70px !important;
-    }
+  .bounding-box {
+    width: 90px !important;
+    height: 70px !important;
+  }
 }
