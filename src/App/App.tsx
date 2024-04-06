@@ -11,8 +11,8 @@ export const App = () => {
     <div className="app_wrapper">
       <Header />
       <Routes>
-        <Route path="/" element={<InitialPage />} />
-        <Route path="/solve" element={<SolvingPage />} />
+        <Route path="" element={<InitialPage />} />
+        <Route path="/solve"  element={<SolvingPage />} />
         <Route path="/thankyou" element={<ThankYouPage />} />
       </Routes>
     </div>
