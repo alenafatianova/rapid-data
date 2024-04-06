@@ -19,6 +19,7 @@ export const SolvingPage = () => {
   const [popupOpen, setPopupOpen] = useState(false);
   // state to track how many images were shown
   const [imagesShown, setImagesShown] = useState(0);
+  const [isBoxDrawn, setIsBoxDrawn] = useState(false);
 
   const [currentImage, setCurrentImage] = useState<CarsType[]>([
     { id: "1", path: vid_4_600, fileName: "vid_4_600.jpg", target: "car" },
@@ -38,16 +39,18 @@ export const SolvingPage = () => {
           await postObject(responseObj);
           console.log("Guess was submitted!", responseObj);
           if (imageIndex < 2) {
-            setImageIndex(imageIndex + 1);
+            setImageIndex(imageIndex + 1)
             // reset the box
-            setIsBounded(false);
+            setIsBounded(false)
             // wait 3 seconds and after alows user to draw another box
-            setResetTransform(true);
-            setTimeout(() => setResetTransform(false), 3000);
+            setResetTransform(true)
+            setTimeout(() => setResetTransform(false), 1000);
+
+            setIsBoxDrawn(false)
           } else {
-            setPopupOpen(true);
+            setPopupOpen(true)
           }
-          setImagesShown(imagesShown + 1);
+         setImagesShown(imagesShown + 1)
         } catch (err) {
           console.log("Error while submiting: ", err);
           throw new Error();
@@ -103,6 +106,8 @@ export const SolvingPage = () => {
         resetTransform={resetTransform}
         currentImage={currentImage[imageIndex]}
         setCurrentImage={() => {}}
+        isBoxDrawn={isBoxDrawn}
+        setIsBoxDrawn={setIsBoxDrawn}
         onChange={() => handleBoundingBoxChange}
       />
       <div className="solving-page_buttons">
