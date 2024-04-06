@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./SolvingPage.css";
 import { BoundingBox } from "../BoundingBox/BoundingBox";
 import { Button } from "../Button/Button";
-import { CarsType, Coordinate } from "../types/types";
+import { CarsType, ResponseObjType } from "../types/types";
 import vid_4_600 from "../../assets/data/vid_4_600.jpg";
 import { postObject } from "../../api/setObject";
 import { useNavigate } from "react-router";
+import throttle from "lodash/throttle";
 
 export const SolvingPage = () => {
-  const [isBounded, setIsBounded] = useState(false);
   const navigate = useNavigate();
+  const [isBounded, setIsBounded] = useState(false);
+  const [resetTransform, setResetTransform] = useState(false);
 
   const [currentImage, setCurrentImage] = useState<CarsType>({
     id: "1",
@@ -18,35 +20,47 @@ export const SolvingPage = () => {
     target: "car",
   });
 
-  const [topLeft, setTopLeft] = useState<Coordinate>({ x: 0, y: 0 });
-  const [bottomRight, setbottomRight] = useState<Coordinate>({
-    x: 100,
-    y: 100,
-  });
-  const responseObj = {
+  const [responseObj, setResponseObj] = useState<ResponseObjType>({
     id: currentImage.id,
-    boundingBox: {
-      topLeft: topLeft,
-      bottomRight: bottomRight,
-    },
-  };
+    boundingBox: null,
+  });
 
   const submitHandler = () => {
-    setTimeout(async () => {
-      await postObject(responseObj);
-      console.log("Guess was submitted!", responseObj);
-      navigate("/thankyou");
-    }, 3000);
+    if (isBounded) {
+      setTimeout(async () => {
+        try {
+          await postObject(responseObj);
+          console.log("Guess was submitted!", responseObj);
+          navigate("/thankyou");
+        } catch (err) {
+          console.log("Error while submiting: ", err);
+          throw new Error();
+        }
+      }, 1000);
+    }
   };
 
-  const cancelHandler = () => {
-    setIsBounded(false);
-    setTopLeft({ x: 0, y: 0 });
-    setbottomRight({ x: 0, y: 0 });
-  };
+  const trottleSubnitHandler = throttle(submitHandler, 2000);
 
   const noCarHandler = () => {
-    console.log("There is no car on the image!");
+    !isBounded && console.log("There is no car on the image!");
+  };
+
+  const handleBoundingBoxChange = (coordinates: {
+    topLeft: { x: number; y: number };
+    bottomRight: { x: number; y: number };
+  }) => {
+    setIsBounded(true);
+    setResponseObj({
+      id: currentImage.id,
+      boundingBox: coordinates,
+    });
+  };
+
+  const handleDeleteBox = () => {
+    setIsBounded(false);
+    setResetTransform(true);
+    setTimeout(() => setResetTransform(false), 3000);
   };
 
   return (
@@ -57,15 +71,21 @@ export const SolvingPage = () => {
         </p>
       </div>
       <BoundingBox
+        resetTransform={resetTransform}
         currentImage={currentImage}
         setCurrentImage={setCurrentImage}
+        onChange={() => handleBoundingBoxChange}
       />
       <div className="solving-page_buttons">
-        <Button className="submit_button" onClick={submitHandler}>
+        <Button
+          disabled={!isBounded}
+          className="submit_button"
+          onClick={trottleSubnitHandler}
+        >
           Submit
         </Button>
-        <Button className="cancel_button" onClick={cancelHandler}>
-          Cancel
+        <Button className="delete-box" onClick={handleDeleteBox}>
+          Delete the box
         </Button>
         <Button className="no-car_button" onClick={noCarHandler}>
           No car on the image
