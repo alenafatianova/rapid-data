@@ -4,15 +4,34 @@ import "./index.css";
 import { App } from "./App/App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
+import { ErrorPage } from "./features/ErrorPage/ErrorPage";
+
+class ErrorBoundary extends React.Component<any, any> {
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      error: true,
+    };
+  }
+
+  componentDidCatch() {
+    this.setState({ error: true });
+  }
+  render() {
+    return this.state.error ? <ErrorPage /> : this.props.children;
+  }
+}
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement,
 );
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </ErrorBoundary>
   </React.StrictMode>,
 );
 
