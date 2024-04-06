@@ -104,6 +104,7 @@ export const SolvingPage = () => {
     navigate("/thankyou");
   };
 
+
   return (
     <div className="solving-page_wrapper">
       <div className="solving-page_banner">
@@ -124,13 +125,13 @@ export const SolvingPage = () => {
 
       <div className="solving-page_buttons">
         <Button
-          disabled={!isBounded}
+          disabled={!isBounded && !isBoxDrawn}
           className="submit_button"
           onClick={trottleSubnitHandler}
         >
           Submit
         </Button>
-        <Button className="delete-box" onClick={handleDeleteBox}>
+        <Button disabled={!isBounded} className="delete-box" onClick={handleDeleteBox}>
           Delete the box
         </Button>
         <Button className="no-car_button" onClick={noCarHandler}>

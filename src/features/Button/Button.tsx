@@ -12,18 +12,6 @@ export const Button: React.FC<ButtonType> = ({
     <React.Fragment>
       <button
         className={className}
-        style={{
-          color: "#2874ed",
-          border: "#2874ed 2px solid",
-          borderRadius: "5px",
-          opacity: "0.9",
-          padding: "5px",
-          cursor: "pointer",
-          fontFamily: "Red Hat Display, sans-serif",
-          minWidth: "120px",
-          marginTop: "50px",
-          backgroundColor: "white",
-        }}
         onClick={onClick}
         disabled={disabled}
       >

@@ -19,6 +19,7 @@
   font-size: 18px;
 }
 
+
 .solving-page_buttons {
   display: grid;
   grid-template-columns: 115px 115px 115px;
@@ -27,12 +28,13 @@
   margin-top: 23px;
 }
 
-.submit_button:hover,
+/* .submit_button:hover,
 .cancel_button:hover,
 .no-car_button:hover,
 .delete-box:hover {
-  background-color: #b9d4ff !important;
-}
+  background-color: #b9d4ff;
+} */
+
 
 @media screen and (max-width: 430px) {
   /* .solving-page_wrapper {
