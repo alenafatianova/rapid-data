@@ -12,6 +12,8 @@ interface BoundingBoxType {
   }) => void;
   resetTransform: boolean;
   setResetTransform?: (resetTransform: boolean) => void;
+  isBoxDrawn: boolean
+  setIsBoxDrawn: (isBoxDrawn: boolean) => void
 }
 
 interface BoundingBoxStyle {
@@ -31,11 +33,12 @@ export const BoundingBox: React.FC<BoundingBoxType> = ({
   onChange,
   resetTransform,
   setResetTransform,
+  isBoxDrawn,
+  setIsBoxDrawn
 }) => {
   const [isDrawing, setIsDrawing] = useState(false);
   const [startPosition, setStartPosition] = useState({ x: 0, y: 0 });
   const [endPosition, setEndPosition] = useState({ x: 0, y: 0 });
-  const [isBoxDrawn, setIsBoxDrawn] = useState(false);
 
   useEffect(() => {
     const getImage = async () => {
@@ -59,7 +62,7 @@ export const BoundingBox: React.FC<BoundingBoxType> = ({
       setEndPosition({ x: 0, y: 0 });
       setResetTransform && setResetTransform(false); // if setResetTransform, then reset transform value
     }
-  }, [resetTransform, setResetTransform]);
+  }, [resetTransform, setResetTransform, setIsBoxDrawn]);
 
   const getCursorPosition = (
     e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>,
@@ -72,23 +75,24 @@ export const BoundingBox: React.FC<BoundingBoxType> = ({
     }
   };
 
-  const handleStart = (
-    e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>,
-  ) => {
-    setIsDrawing(true);
-    const position = getCursorPosition(e);
-    setStartPosition(position);
+  const handleStart = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
+    if (!isBoxDrawn) {
+      const position = getCursorPosition(e);
+
+      setIsDrawing(true);
+      setStartPosition(position);
+    }
   };
 
-  const handleMove = (
-    e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>,
-  ) => {
+  const handleMove = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
     if (isDrawing) {
       const position = getCursorPosition(e);
       setEndPosition(position);
+      setIsBoxDrawn(true);
     }
     e.preventDefault();
-    setIsBoxDrawn(true);
+
+
   };
 
   const handleEnd = () => {
