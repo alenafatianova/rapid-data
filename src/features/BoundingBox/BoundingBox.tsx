@@ -90,7 +90,7 @@ export const BoundingBox: React.FC<BoundingBoxType> = ({
       setEndPosition(position);
       setIsBoxDrawn(true);
     }
-    e.preventDefault();
+    //e.preventDefault();
 
 
   };
