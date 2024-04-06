@@ -4,6 +4,8 @@ import { BoundingBox } from "../BoundingBox/BoundingBox";
 import { Button } from "../Button/Button";
 import { CarsType, ResponseObjType } from "../types/types";
 import vid_4_600 from "../../assets/data/vid_4_600.jpg";
+import vid_4_980 from "../../assets/data/vid_4_980.jpg";
+import vid_4_1000 from "../../assets/data/vid_4_1000.jpg";
 import { postObject } from "../../api/setObject";
 import { useNavigate } from "react-router";
 import throttle from "lodash/throttle";
@@ -12,16 +14,17 @@ export const SolvingPage = () => {
   const navigate = useNavigate();
   const [isBounded, setIsBounded] = useState(false);
   const [resetTransform, setResetTransform] = useState(false);
+  const [imageIndex, setImageIndex] = useState(0)
 
-  const [currentImage, setCurrentImage] = useState<CarsType>({
-    id: "1",
-    path: vid_4_600,
-    fileName: "vid_4_600.jpg",
-    target: "car",
-  });
+  const [currentImage, setCurrentImage] = useState<CarsType[]>([
+    { id: "1", path: vid_4_600, fileName: "vid_4_600.jpg", target: "car" },
+    { id: "2", path: vid_4_980, fileName: "vid_4_980.jpg", target: "car" },
+    { id: "3", path: vid_4_1000, fileName: "vid_4_1000.jpg", target: "car" },
+  ]);
+
 
   const [responseObj, setResponseObj] = useState<ResponseObjType>({
-    id: currentImage.id,
+    id: currentImage[imageIndex].id,
     boundingBox: null,
   });
 
@@ -31,7 +34,18 @@ export const SolvingPage = () => {
         try {
           await postObject(responseObj);
           console.log("Guess was submitted!", responseObj);
-          navigate("/thankyou");
+          if (imageIndex < 2) {
+            setImageIndex(imageIndex + 1)
+            // reset the box
+            setIsBounded(false)
+            // wait 3 seconds and after alows user to draw another box
+            setResetTransform(true)
+            setTimeout(() => setResetTransform(false), 3000);
+          } else {
+            // Make another page with suggestion to continue the tasks or to go back to initial page
+            navigate("/thankyou");
+          }
+
         } catch (err) {
           console.log("Error while submiting: ", err);
           throw new Error();
@@ -39,6 +53,7 @@ export const SolvingPage = () => {
       }, 1000);
     }
   };
+
 
   const trottleSubnitHandler = throttle(submitHandler, 2000);
 
@@ -52,7 +67,7 @@ export const SolvingPage = () => {
   }) => {
     setIsBounded(true);
     setResponseObj({
-      id: currentImage.id,
+      id: currentImage[imageIndex].id,
       boundingBox: coordinates,
     });
   };
@@ -72,8 +87,8 @@ export const SolvingPage = () => {
       </div>
       <BoundingBox
         resetTransform={resetTransform}
-        currentImage={currentImage}
-        setCurrentImage={setCurrentImage}
+        currentImage={currentImage[imageIndex]}
+        setCurrentImage={() => {}}
         onChange={() => handleBoundingBoxChange}
       />
       <div className="solving-page_buttons">
