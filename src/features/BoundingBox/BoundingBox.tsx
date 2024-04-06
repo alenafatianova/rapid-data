@@ -22,6 +22,7 @@ interface BoundingBoxStyle {
   resize?: "both" | "none";
   overflow?: "auto" | "hidden";
   position?: "static" | "relative";
+  opacity: string | number
 }
 
 export const BoundingBox: React.FC<BoundingBoxType> = ({
@@ -114,6 +115,7 @@ export const BoundingBox: React.FC<BoundingBoxType> = ({
     height: isBoxDrawn ? Math.abs(startPosition.y - endPosition.y) : 0,
     resize: isBoxDrawn ? "both" : "none",
     overflow: isBoxDrawn ? "auto" : "hidden",
+    opacity: isBoxDrawn ? "unset" : 0
   };
 
   return (
