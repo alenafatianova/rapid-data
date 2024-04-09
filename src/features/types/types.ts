@@ -32,6 +32,18 @@ export interface ResponseObjType {
   boundingBox: BoxParamsType | null;
 }
 
+
+export interface BoundingBoxStyle {
+  left: number;
+  top: number;
+  width: number;
+  height: number | string;
+  resize?: "both" | "none";
+  overflow?: "auto" | "hidden";
+  position?: "static" | "relative";
+  opacity: string | number
+}
+
 export interface BoundingBoxType {
   currentImage: CarsType;
   setCurrentImage: (currentImage: CarsType) => void;
@@ -39,6 +51,8 @@ export interface BoundingBoxType {
     topLeft: { x: number; y: number };
     bottomRight: { x: number; y: number };
   }) => void;
-  className?: string;
   resetTransform: boolean;
+  setResetTransform?: (resetTransform: boolean) => void;
+  isBoxDrawn: boolean
+  setIsBoxDrawn: (isBoxDrawn: boolean) => void
 }
