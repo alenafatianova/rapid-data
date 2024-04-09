@@ -1,14 +1,14 @@
 .solving-page_banner {
+  margin-top: 30px;
   width: 100%;
-  height: 80px;
+  height: 50px;
   background-color: rgb(40, 116, 237);
   opacity: 0.8;
-  min-height: 50px;
+  /* min-height: 50px; */
   border-radius: 5px;
-  position: relative;
+  /* position: relative; */
   top: 20px;
-  z-index: 1;
-
+  /* z-index: 1; */
   display: flex;
   justify-content: center;
   align-items: center;

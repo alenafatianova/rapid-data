@@ -22,9 +22,6 @@
     justify-content: center;
   }
 
-  .box_image {
-    max-width: 350px;
-  }
   .box_image img {
     width: 100%;
   }

@@ -1,31 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./BoundingBox.css";
 import { getObjectAfterDelay } from "../../api/getObject";
-import { CarsType } from "../types/types";
+import { BoundingBoxStyle, BoundingBoxType, Coordinate } from "../types/types";
 
-interface BoundingBoxType {
-  currentImage: CarsType;
-  setCurrentImage: (currentImage: CarsType) => void;
-  onChange: (coordinates: {
-    topLeft: { x: number; y: number };
-    bottomRight: { x: number; y: number };
-  }) => void;
-  resetTransform: boolean;
-  setResetTransform?: (resetTransform: boolean) => void;
-  isBoxDrawn: boolean
-  setIsBoxDrawn: (isBoxDrawn: boolean) => void
-}
-
-interface BoundingBoxStyle {
-  left: number;
-  top: number;
-  width: number;
-  height: number | string;
-  resize?: "both" | "none";
-  overflow?: "auto" | "hidden";
-  position?: "static" | "relative";
-  opacity: string | number
-}
 
 export const BoundingBox: React.FC<BoundingBoxType> = ({
   currentImage,
@@ -39,6 +16,7 @@ export const BoundingBox: React.FC<BoundingBoxType> = ({
   const [isDrawing, setIsDrawing] = useState(false);
   const [startPosition, setStartPosition] = useState({ x: 0, y: 0 });
   const [endPosition, setEndPosition] = useState({ x: 0, y: 0 });
+  const [bound, setBound] = useState({bottom: 0, left: 0, width: 0, height: 0})
 
   useEffect(() => {
     const getImage = async () => {
@@ -60,6 +38,7 @@ export const BoundingBox: React.FC<BoundingBoxType> = ({
       setIsBoxDrawn(false);
       setStartPosition({ x: 0, y: 0 });
       setEndPosition({ x: 0, y: 0 });
+      setBound({bottom: 0, left: 0, width: 0, height: 0});
       setResetTransform && setResetTransform(false); // if setResetTransform, then reset transform value
     }
   }, [resetTransform, setResetTransform, setIsBoxDrawn]);
@@ -67,11 +46,15 @@ export const BoundingBox: React.FC<BoundingBoxType> = ({
   const getCursorPosition = (
     e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>,
   ) => {
-    if ("touches" in e) {
-      const touch = e.touches[0];
-      return { x: touch.clientX, y: touch.clientY };
-    } else {
-      return { x: e.clientX, y: e.clientY };
+    const point = "touches" in e ? e.touches[0] : e
+    return { x: point.clientX, y: point.clientY }
+  };
+
+
+  const absoluteToPercentage = (point: Coordinate) => {
+    return {
+      x: +((point.x - bound.left) / bound.width * 100).toFixed(4),
+      y: +((bound.bottom - point.y) / bound.height * 100).toFixed(4),
     }
   };
 
@@ -81,6 +64,9 @@ export const BoundingBox: React.FC<BoundingBoxType> = ({
 
       setIsDrawing(true);
       setStartPosition(position);
+
+      setEndPosition(position);
+      setBound(e.currentTarget.getBoundingClientRect())
     }
   };
 
@@ -91,22 +77,20 @@ export const BoundingBox: React.FC<BoundingBoxType> = ({
       setIsBoxDrawn(true);
     }
     //e.preventDefault();
-
-
   };
 
   const handleEnd = () => {
     if (!isDrawing) return;
     setIsDrawing(false);
     onChange({
-      topLeft: {
+      topLeft: absoluteToPercentage({
         x: Math.min(startPosition.x, endPosition.x),
         y: Math.min(startPosition.y, endPosition.y),
-      },
-      bottomRight: {
+      }),
+      bottomRight: absoluteToPercentage({
         x: Math.max(startPosition.x, endPosition.x),
         y: Math.max(startPosition.y, endPosition.y),
-      },
+      }),
     });
     setIsDrawing(false);
     setIsBoxDrawn(true);
@@ -123,6 +107,7 @@ export const BoundingBox: React.FC<BoundingBoxType> = ({
   };
 
   return (
+    <div className="box_image">
     <div
       className="bounding-box_wrapper"
       onMouseDown={handleStart}
@@ -133,7 +118,7 @@ export const BoundingBox: React.FC<BoundingBoxType> = ({
       onTouchEnd={handleEnd}
     >
       <div className="bounding-box" style={boundingBoxStyle} />
-      <div className="box_image">
+      
         <img src={currentImage?.path} alt="Car" />
       </div>
     </div>

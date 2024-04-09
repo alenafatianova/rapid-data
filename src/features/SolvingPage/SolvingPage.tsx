@@ -109,7 +109,7 @@ export const SolvingPage = () => {
     <div className="solving-page_wrapper">
       <div className="solving-page_banner">
         <p className="banner_text">
-          Do you see a car? Drag a rectangle over it!
+          Do you see a car? Draw a rectangle over it!
         </p>
       </div>
       {currentImage && (
